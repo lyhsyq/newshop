@@ -30,12 +30,15 @@
 // 2. rules: {表单绑定的数据的名称: [{required: true, message: "提示信息", trigger: "触发校验的时机blur change"}]}
 // 3. 需要把这个校验规则对象绑定到el-form组件上 :rules="校验规则则对象"
 // 4. 需要给每一项被校验的el-form-item组件添加 prop属性 属性值就是 绑定的数据的名称
+
+import axios from 'axios'
+
 export default {
     data() {
         return {
             form: {
-                username: "",
-                password: ""
+                username: "admin",
+                password: "123456"
             },
             formRules: {
                 username: [
@@ -76,7 +79,24 @@ export default {
           // valid形参，接收到的就是表单的校验结果
           // 如果表单校验成功则是 true  如果不成功则是false
           if (valid) {
-            alert('submit!');
+            axios({
+              url: "http://localhost:8888/api/private/v1/login",
+              method: 'post',
+              data: this.form
+              // 这里是嵌套解构
+            }).then(({data: {data, meta}}) => {
+              // 如果上面的代码看不懂，你就直接使用下面的这一行 res就可以了
+            // }).then((res) => {
+              // console.log(data, meta);
+              // if(res.data.meta.status == 200){
+              //   console.log(res.data.meta.msg)
+              // }
+
+              if(meta.status == 200){
+                // console.log(meta.msg);
+                this.$router.push("/home")
+              }
+            })
           } else {
             // console.log('error submit!!');
             return false;
