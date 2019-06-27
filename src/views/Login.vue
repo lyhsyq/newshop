@@ -6,17 +6,17 @@
         <!-- el-col 布局组件 列组件 -->
         <!-- span 属性是用来设置当前列所占的格数的 -->
         <el-col :xs="14" :sm="12" :md="10" :lg="8" :xl="6">
-            <el-form ref="form" :model="form" class="login-form" label-position="top" label-width="80px">
-                <el-form-item label="用户名">
+            <el-form ref="loginForm" :rules="formRules" :model="form" class="login-form" label-position="top" label-width="80px">
+                <el-form-item label="用户名" prop="username">
                     <el-input v-model="form.username"></el-input>
                 </el-form-item>
 
-                <el-form-item label="密码">
+                <el-form-item label="密码" prop="password">
                     <el-input v-model="form.password"></el-input>
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">登录</el-button>
+                    <el-button type="primary">登录</el-button>
                     <el-button>重置</el-button>
                 </el-form-item>
             </el-form>
@@ -24,19 +24,51 @@
     </el-row>
 </template>
 <script>
+
+// 要实现表单校验：
+// 1. 先给数据中添加一个校验规则对象
+// 2. rules: {表单绑定的数据的名称: [{required: true, message: "提示信息", trigger: "触发校验的时机blur change"}]}
+// 3. 需要把这个校验规则对象绑定到el-form组件上 :rules="校验规则则对象"
+// 4. 需要给每一项被校验的el-form-item组件添加 prop属性 属性值就是 绑定的数据的名称
 export default {
     data() {
         return {
             form: {
                 username: "",
                 password: ""
+            },
+            formRules: {
+                username: [
+                    {
+                        required: true,
+                        message: "请输入用户名",
+                        trigger: "blur"
+                    }
+                ],
+                password: [
+                    {
+                        required: true,
+                        message: "请输入密码",
+                        trigger: "blur"
+                    }
+                ]
             }
         };
     },
     methods: {
-        onSubmit() {
-            console.log("submit!");
-        }
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
     }
 };
 </script>
