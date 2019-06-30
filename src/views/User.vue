@@ -14,8 +14,10 @@
                 <!-- 在这里，无法直接获取到每一行的数据，这个数据在el-table表格组件中 -->
                 <!-- 如果要获取每一行的数据，那么我们就需要通过作用于插槽的方式，把数据接收到 -->
                
+                <!-- 就是把 el-switch这个组件 传入到el-table-column的插槽里面去 -->
+                <!-- row 就是当前行的数据 类似于我们之前做v-for的时候的item -->
                 <template v-slot="{row}">   
-                  <el-switch v-model="row.type" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+                  <el-switch v-model="row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
                 </template>
                 
             </el-table-column>
@@ -47,7 +49,7 @@ export default {
                 Authorization: localStorage.getItem("token")
             }
         }).then(res => {
-            // console.log(res);
+            console.log(res);
             // this.userList = res.data.data.users;
 
             let {
